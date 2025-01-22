@@ -1,10 +1,13 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
-    public class WebAPIDbContext : IdentityDbContext<User>
+    public class WebAPIDbContext : IdentityDbContext<User, Role, int, 
+                                                     IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, 
+                                                     IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public WebAPIDbContext(DbContextOptions<WebAPIDbContext> options) : base(options) { }
 

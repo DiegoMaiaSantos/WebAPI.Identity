@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Repository;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add context to the dbo
+builder.Services.AddDbContext<WebAPIDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIConnextion")));
 
 // Add services to the container.
 
