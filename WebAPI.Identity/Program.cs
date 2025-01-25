@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
 using System.Text;
+using WebAPI.Identity.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddCors();
+
+// Add MappingProfile to the application
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add services to the container.
 
