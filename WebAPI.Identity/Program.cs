@@ -16,7 +16,7 @@ builder.Services.AddDbContext<WebAPIDbContext>(options =>
 
 builder.Services.AddIdentity<User, Role>(options =>
 {
-    options.SignIn.RequireConfirmedEmail = true;
+    //options.SignIn.RequireConfirmedEmail = true;
 
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;

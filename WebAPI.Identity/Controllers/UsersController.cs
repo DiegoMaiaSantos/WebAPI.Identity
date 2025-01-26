@@ -33,9 +33,9 @@ namespace WebAPI.Identity.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult GetUserDto()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new UserDto());
         }
 
         // GET api/<UsersController>/5
@@ -102,14 +102,14 @@ namespace WebAPI.Identity.Controllers
 
                         var token = GenerateJWToken(appUser).Result;
 
-                        var confirmationEmail = Url.Action("ConfirmEmailAddress", "Home",
-                            new
-                            {
-                                token = token,
-                                email = user.Email
-                            }, Request.Scheme);
+                        //var confirmationEmail = Url.Action("ConfirmEmailAddress", "Home",
+                        //    new
+                        //    {
+                        //        token = token,
+                        //        email = user.Email
+                        //    }, Request.Scheme);
 
-                        System.IO.File.WriteAllText("confirmationEmail.txt", confirmationEmail);
+                        //System.IO.File.WriteAllText("confirmationEmail.txt", confirmationEmail);
                     }
                 }
                 return Unauthorized();
