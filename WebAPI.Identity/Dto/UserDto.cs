@@ -5,7 +5,7 @@ namespace WebAPI.Identity.Dto
     public class UserDto
     {
         public string UserName { get; set; }
-        public string FullName { get; set; }
+        public string? NomeCompleto { get; set; }
 
         [DataType(DataType.Password)]
         public string Password { get; set; }

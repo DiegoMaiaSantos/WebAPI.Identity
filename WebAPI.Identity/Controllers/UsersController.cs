@@ -90,7 +90,8 @@ namespace WebAPI.Identity.Controllers
                     user = new User()
                     {
                         UserName = dto.UserName,
-                        Email = dto.UserName
+                        Email = dto.UserName,
+                        NomeCompleto = dto.NomeCompleto
                     };
 
                     var result = await _userManager.CreateAsync(user, dto.Password);

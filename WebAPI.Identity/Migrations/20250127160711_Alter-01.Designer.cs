@@ -12,8 +12,8 @@ using Repository;
 namespace WebAPI.Identity.Migrations
 {
     [DbContext(typeof(WebAPIDbContext))]
-    [Migration("20250123210619_Initial-01")]
-    partial class Initial01
+    [Migration("20250127160711_Alter-01")]
+    partial class Alter01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
