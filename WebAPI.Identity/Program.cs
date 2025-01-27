@@ -1,9 +1,12 @@
 using Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
+using System.Net;
 using System.Text;
 using WebAPI.Identity.Profiles;
 
@@ -42,6 +45,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddCors();
 
+builder.Services.AddMvc(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
 // Add MappingProfile to the application
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -64,6 +76,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 

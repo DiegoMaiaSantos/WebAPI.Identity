@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ namespace WebAPI.Identity.Controllers
 
         // GET api/<UsersController>/5
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(UserLoginDto dto)
         {
             try
@@ -78,7 +80,7 @@ namespace WebAPI.Identity.Controllers
         }
 
         // POST api/<UsersController>
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(UserDto dto)
         {
             try
