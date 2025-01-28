@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using WebAPI.Identity.Dto;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,30 +12,79 @@ namespace WebAPI.Identity.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
+        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<User> _userManager;
+
+        public RolesController(RoleManager<Role> roleManager, UserManager<User> userManager)
+        {
+            _roleManager = roleManager;
+            _userManager = userManager;
+        }
+
         // GET: api/<RolesController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new
+            {
+                role = new RoleDto(),
+                UpdateUserRole = new UpdateUserRoleDto()
+            });
         }
 
         // GET api/<RolesController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "Get")]
+        [Authorize(Roles = "Admin, Gerente")]
         public string Get(int id)
         {
             return "value";
         }
 
         // POST api/<RolesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("CreateRole")]
+        public async Task<IActionResult> CreateRole(RoleDto dto)
         {
+            try
+            {
+                var result = await _roleManager.CreateAsync(new Role { Name = dto.Name });
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error: {ex.Message}");
+            }
         }
 
         // PUT api/<RolesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateUserRoles")]
+        public async Task<IActionResult> UpdateUserRoles(UpdateUserRoleDto dto)
         {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(dto.Email);
+
+                if (user != null)
+                {
+                    if (dto.Delete)
+                        await _userManager.RemoveFromRoleAsync(user, dto.Role);
+                    else
+                        await _userManager.AddToRoleAsync(user, dto.Role);
+                }
+                else
+                {
+                    return NotFound("Usuário não encontrado.");
+                }
+
+                return Ok("Success");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error: {ex.Message}");
+            }
         }
 
         // DELETE api/<RolesController>/5

@@ -17,13 +17,14 @@ builder.Services.AddDbContext<WebAPIDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIConnection"), b =>
         b.MigrationsAssembly("WebAPI.Identity")));
 
-builder.Services.AddIdentity<User, Role>(options =>
+builder.Services.AddIdentityCore<User>(options =>
 {
     //options.SignIn.RequireConfirmedEmail = true;
 
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;
 })
+.AddRoles<Role>()
 .AddEntityFrameworkStores<WebAPIDbContext>()
 .AddRoleValidator<RoleValidator<Role>>()
 .AddRoleManager<RoleManager<Role>>()
